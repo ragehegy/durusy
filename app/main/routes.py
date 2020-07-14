@@ -14,24 +14,13 @@ import pandas as pd
 def index():
     return render_template('main/index.html')
 
-@main.route('/users')
-def users():
-    db_session = scoped_session(sessionmaker(bind=current_app.config['ENGINE']))
-    # users = db_session.query(User)
-    users = pd.read_sql(db_session.query(User).statement,db_session.bind)
-    # print(users)
-    # df=pd.DataFrame(users)
-    return render_template('admin/users.html', users=[users.to_html(classes="table table-striped", header="true")])
+@main.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
-@main.route('/courses')
-def courses():
-    db_session = scoped_session(sessionmaker(bind=current_app.config['ENGINE']))
-    # courses = db_session.query(Course)
-    courses = pd.read_sql(db_session.query(Course).statement,db_session.bind)
-    # print(users)
-    # df=pd.DataFrame(users)
-    return render_template('admin/courses.html', courses=[courses.to_html(classes="table table-striped", header="true")])
-
+@main.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
 
 # @main.route('/user/<username>')
 # def user(username):
