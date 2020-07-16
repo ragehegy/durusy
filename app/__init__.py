@@ -14,6 +14,7 @@ db = SQLAlchemy()
 # pagedown = PageDown()
 
 login_manager = LoginManager()
+login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
 
@@ -32,10 +33,6 @@ def create_app(config_name):
     app.register_blueprint(admin_blueprint)
 
     from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.get(user_id)    
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')   
 
     return app
